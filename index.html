@@ -5,55 +5,136 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Color and Box Selector</title>
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+
+        form {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            max-width: 500px;
+            margin: auto;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input[type="number"],
+        input[type="text"] {
+            width: calc(100% - 22px);
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #boxesContainer {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
         .color-box {
-            width: 100px;
-            height: 100px;
+            width: 120px;
+            height: 120px;
             margin: 10px;
-            display: inline-block;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             position: relative;
             text-align: center;
-            line-height: 100px;
+            line-height: 1.5;
             cursor: pointer;
             font-weight: bold;
+            border-radius: 8px;
             transition: background-color 0.3s, transform 0.3s, color 0.3s;
             font-size: 16px;
         }
+
         .color-box:hover {
-            background-color: #ddd; /* Lighten the color on hover */
-            transform: scale(1.05); /* Slightly increase the size on hover */
+            background-color: #ddd;
+            transform: scale(1.05);
         }
+
+        .color-box .default-text {
+            transition: opacity 0.3s;
+        }
+
         .color-box .copy-text {
-            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 4px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 14px;
         }
+
         .color-box.copy:hover .default-text {
-            display: none;
+            opacity: 0;
         }
+
         .color-box.copy:hover .copy-text {
-            display: block;
+            opacity: 1;
         }
+
         #generatedColors {
             margin-top: 20px;
+            text-align: center;
+        }
+
+        #generatedColors p {
+            font-size: 14px;
+            margin: 5px 0;
+            color: #555;
         }
     </style>
 </head>
 <body>
     <form id="colorBoxForm">
         <label for="hex">Hex Color:</label>
-        <input type="text" id="hex" name="hex" required pattern="^#([A-Fa-f0-9]{6})$"><br><br>
+        <input type="text" id="hex" name="hex" required pattern="^#([A-Fa-f0-9]{6})$" placeholder="#RRGGBB"><br>
 
         <label for="hue">Hue (0 to 360):</label>
-        <input type="number" id="hue" name="hue" min="0" max="360" required><br><br>
+        <input type="number" id="hue" name="hue" min="0" max="360" required placeholder="360"><br>
 
         <label for="saturation">Saturation (% from -100 to +100):</label>
-        <input type="number" id="saturation" name="saturation" min="-100" max="100" step="0.1" required><br><br>
+        <input type="number" id="saturation" name="saturation" min="-100" max="100" step="0.1" required placeholder="100"><br>
 
         <label for="value">Value (% from -100 to +100):</label>
-        <input type="number" id="value" name="value" min="-100" max="100" step="0.1" required><br><br>
+        <input type="number" id="value" name="value" min="-100" max="100" step="0.1" required placeholder="100"><br>
 
         <label for="boxes">Number of Boxes:</label>
-        <input type="number" id="boxes" name="boxes" min="1" required><br><br>
+        <input type="number" id="boxes" name="boxes" min="1" required placeholder="10"><br>
 
-        <button type="submit">Submit</button>
+        <button type="submit">Generate Boxes</button>
     </form>
     <div id="boxesContainer"></div>
     <div id="generatedColors"></div>
@@ -106,9 +187,10 @@
 
         function copyToClipboard(text, box) {
             navigator.clipboard.writeText(text).then(() => {
-                box.querySelector('.default-text').textContent = 'Copied';
+                let defaultText = box.querySelector('.default-text');
+                defaultText.textContent = 'Copied';
                 setTimeout(() => {
-                    box.querySelector('.default-text').textContent = text;
+                    defaultText.textContent = text;
                 }, 1000);
             }).catch(err => {
                 alert('Failed to copy: ' + err);
