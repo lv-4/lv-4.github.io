@@ -21,21 +21,17 @@
             background-color: #ddd; /* Lighten the color on hover */
             transform: scale(1.05); /* Slightly increase the size on hover */
         }
-        .color-box::after {
+        .color-box.copy-text::after {
             content: 'Copy';
+            color: #333;
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background-color: rgba(0, 0, 0, 0.7);
-            color: white;
-            padding: 5px;
-            border-radius: 3px;
-            display: none; /* Hide by default */
-            pointer-events: none;
+            font-size: 16px;
         }
-        .color-box.hover-text::after {
-            display: block; /* Show on hover */
+        .color-box.default-text::after {
+            content: '';
         }
         #generatedColors {
             margin-top: 20px;
@@ -146,14 +142,14 @@
                 let newHsv = adjustHsv(hsv[0], hsv[1], hsv[2], hueAdjust * i, satAdjust * i, valAdjust * i);
                 let newHex = hsvToHex(newHsv[0], newHsv[1], newHsv[2]);
                 let box = document.createElement('div');
-                box.className = 'color-box';
+                box.className = 'color-box default-text';
                 box.style.backgroundColor = newHex;
                 box.textContent = newHex;
                 box.style.color = isBright(newHex) ? 'black' : 'white';
 
                 box.addEventListener('click', () => copyToClipboard(newHex, box));
-                box.addEventListener('mouseover', () => box.classList.add('hover-text'));
-                box.addEventListener('mouseout', () => box.classList.remove('hover-text'));
+                box.addEventListener('mouseover', () => box.className = 'color-box copy-text');
+                box.addEventListener('mouseout', () => box.className = 'color-box default-text');
 
                 boxContainer.appendChild(box);
                 colorList.innerHTML += `<p>${newHex}</p>`;
