@@ -15,19 +15,21 @@
             line-height: 100px;
             cursor: pointer;
             font-weight: bold;
-            transition: background-color 0.3s, transform 0.3s;
+            transition: background-color 0.3s, transform 0.3s, color 0.3s;
             font-size: 16px;
         }
         .color-box:hover {
             background-color: #ddd; /* Lighten the color on hover */
             transform: scale(1.05); /* Slightly increase the size on hover */
         }
-        .color-box.copy-text::after {
-            content: 'Copy';
-            color: #333;
+        .color-box .copy-text {
+            display: none;
         }
-        .color-box.default-text::after {
-            content: '';
+        .color-box.copy:hover .default-text {
+            display: none;
+        }
+        .color-box.copy:hover .copy-text {
+            display: block;
         }
         #generatedColors {
             margin-top: 20px;
@@ -104,9 +106,9 @@
 
         function copyToClipboard(text, box) {
             navigator.clipboard.writeText(text).then(() => {
-                box.textContent = 'Copied';
+                box.querySelector('.default-text').textContent = 'Copied';
                 setTimeout(() => {
-                    box.textContent = text;
+                    box.querySelector('.default-text').textContent = text;
                 }, 1000);
             }).catch(err => {
                 alert('Failed to copy: ' + err);
@@ -138,19 +140,26 @@
                 let newHsv = adjustHsv(hsv[0], hsv[1], hsv[2], hueAdjust * i, satAdjust * i, valAdjust * i);
                 let newHex = hsvToHex(newHsv[0], newHsv[1], newHsv[2]);
                 let box = document.createElement('div');
-                box.className = 'color-box default-text';
+                box.className = 'color-box';
                 box.style.backgroundColor = newHex;
-                box.textContent = newHex;
-                box.style.color = isBright(newHex) ? 'black' : 'white';
+
+                let hexText = document.createElement('div');
+                hexText.className = 'default-text';
+                hexText.textContent = newHex;
+
+                let copyText = document.createElement('div');
+                copyText.className = 'copy-text';
+                copyText.textContent = 'Copy';
+
+                box.appendChild(hexText);
+                box.appendChild(copyText);
 
                 box.addEventListener('click', () => copyToClipboard(newHex, box));
                 box.addEventListener('mouseover', () => {
-                    box.textContent = 'Copy';
-                    box.className = 'color-box copy-text';
+                    hexText.textContent = 'Copy';
                 });
                 box.addEventListener('mouseout', () => {
-                    box.textContent = newHex;
-                    box.className = 'color-box default-text';
+                    hexText.textContent = newHex;
                 });
 
                 boxContainer.appendChild(box);
