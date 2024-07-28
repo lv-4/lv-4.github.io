@@ -16,6 +16,7 @@
             cursor: pointer;
             font-weight: bold;
             transition: background-color 0.3s, transform 0.3s;
+            font-size: 16px;
         }
         .color-box:hover {
             background-color: #ddd; /* Lighten the color on hover */
@@ -24,11 +25,6 @@
         .color-box.copy-text::after {
             content: 'Copy';
             color: #333;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 16px;
         }
         .color-box.default-text::after {
             content: '';
@@ -148,8 +144,14 @@
                 box.style.color = isBright(newHex) ? 'black' : 'white';
 
                 box.addEventListener('click', () => copyToClipboard(newHex, box));
-                box.addEventListener('mouseover', () => box.className = 'color-box copy-text');
-                box.addEventListener('mouseout', () => box.className = 'color-box default-text');
+                box.addEventListener('mouseover', () => {
+                    box.textContent = 'Copy';
+                    box.className = 'color-box copy-text';
+                });
+                box.addEventListener('mouseout', () => {
+                    box.textContent = newHex;
+                    box.className = 'color-box default-text';
+                });
 
                 boxContainer.appendChild(box);
                 colorList.innerHTML += `<p>${newHex}</p>`;
