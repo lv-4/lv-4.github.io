@@ -1,0 +1,396 @@
+<style>
+  :root{
+  --bg:#10041c;
+  --card:#1b0f2c;
+  --pink:#ff71ce;
+  --blue:#01cdfe;
+  --purple:#b967ff;
+  --text:#f7f0ff;
+}
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+body{
+  background:var(--bg);
+  font-family:"Courier New", monospace;
+  color:var(--text);
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+.bg-grid{
+  position:fixed;
+  inset:0;
+
+  background:
+    linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
+
+  background-size:40px 40px;
+  pointer-events:none;
+}
+
+.wrapper{
+  max-width:1100px;
+  margin:auto;
+  padding:50px 20px;
+
+  display:grid;
+  gap:30px;
+  grid-template-columns:repeat(auto-fit,minmax(380px,1fr));
+}
+
+.calendar{
+  background:rgba(27,15,44,.9);
+
+  border:1px solid var(--pink);
+
+  border-radius:20px;
+
+  padding:28px;
+
+  box-shadow:
+    0 0 20px rgba(255,113,206,.3),
+    0 0 60px rgba(1,205,254,.1);
+}
+
+.month{
+  color:var(--pink);
+
+  text-align:center;
+
+  margin-bottom:25px;
+
+  letter-spacing:4px;
+
+  text-shadow:
+    0 0 10px var(--pink),
+    0 0 20px var(--purple);
+}
+
+.weekdays,
+.days{
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+}
+
+.weekdays div{
+  text-align:center;
+  color:var(--blue);
+  padding-bottom:15px;
+}
+
+.days div{
+  position:relative;
+
+  height:52px;
+
+  display:flex;
+  justify-content:center;
+  align-items:center;
+
+  border-radius:10px;
+
+  transition:.25s ease;
+}
+
+.days div:not(.empty):hover{
+  background:rgba(255,113,206,.15);
+
+  color:white;
+
+  transform:translateY(-2px);
+
+  box-shadow:0 0 12px rgba(255,113,206,.5);
+}
+
+.empty{
+  opacity:0;
+  pointer-events:none;
+}
+
+.event-day{
+  cursor:pointer;
+  color:var(--blue);
+  font-weight:bold;
+}
+
+.event-dot{
+  position:absolute;
+
+  bottom:6px;
+  left:50%;
+
+  transform:translateX(-50%);
+
+  width:8px;
+  height:8px;
+
+  border-radius:50%;
+
+  background:var(--pink);
+
+  box-shadow:
+    0 0 10px var(--pink),
+    0 0 20px var(--pink);
+}
+
+.overlay{
+  position:fixed;
+  inset:0;
+
+  background:rgba(0,0,0,.7);
+
+  display:flex;
+  justify-content:center;
+  align-items:center;
+
+  opacity:0;
+  visibility:hidden;
+
+  transition:.25s;
+}
+
+.overlay.active{
+  opacity:1;
+  visibility:visible;
+}
+
+.event-card{
+  width:min(520px,90vw);
+
+  background:var(--card);
+
+  border:1px solid var(--blue);
+
+  border-radius:20px;
+
+  padding:30px;
+
+  transform:scale(.85);
+
+  opacity:0;
+
+  transition:.25s ease;
+
+  box-shadow:
+    0 0 30px rgba(1,205,254,.35),
+    0 0 70px rgba(255,113,206,.2);
+}
+
+.overlay.active .event-card{
+  transform:scale(1);
+  opacity:1;
+}
+
+#closeBtn{
+  float:right;
+
+  background:none;
+  border:none;
+
+  color:var(--pink);
+
+  font-size:28px;
+
+  cursor:pointer;
+}
+
+#closeBtn:hover{
+  color:white;
+}
+
+.event-card h2{
+  color:var(--pink);
+
+  margin-bottom:10px;
+
+  text-shadow:0 0 10px var(--pink);
+}
+
+.date{
+  color:var(--blue);
+}
+
+.divider{
+  height:1px;
+  background:rgba(255,255,255,.15);
+  margin:20px 0;
+}
+</style>
+
+<div class="bg-grid"></div>
+
+<div class="wrapper">
+
+  <section class="calendar">
+    <h2 class="month">JUNE 2026</h2>
+
+    <div class="weekdays">
+      <div>Su</div><div>Mo</div><div>Tu</div>
+      <div>We</div><div>Th</div><div>Fr</div><div>Sa</div>
+    </div>
+
+    <div class="days">
+
+      <div class="empty"></div>
+
+      <div>1</div>
+      <div>2</div>
+
+      <div class="event-day"
+        data-title="Neon Night"
+        data-date="June 3, 2026"
+        data-desc="Late-night vaporwave playlist session and synth visuals.">
+        3
+        <span class="event-dot"></span>
+      </div>
+
+      <div>4</div>
+      <div>5</div>
+      <div>6</div>
+
+      <div>7</div>
+      <div>8</div>
+      <div>9</div>
+      <div>10</div>
+
+      <div class="event-day"
+        data-title="Design Review"
+        data-date="June 11, 2026"
+        data-desc="Review concepts and finalize aesthetics.">
+        11
+        <span class="event-dot"></span>
+      </div>
+
+      <div>12</div>
+      <div>13</div>
+
+      <div>14</div>
+      <div>15</div>
+      <div>16</div>
+      <div>17</div>
+      <div>18</div>
+      <div>19</div>
+      <div>20</div>
+
+      <div>21</div>
+      <div>22</div>
+      <div>23</div>
+
+      <div class="event-day"
+        data-title="Project Launch"
+        data-date="June 24, 2026"
+        data-desc="Final deployment and public release.">
+        24
+        <span class="event-dot"></span>
+      </div>
+
+      <div>25</div>
+      <div>26</div>
+      <div>27</div>
+
+      <div>28</div>
+      <div>29</div>
+      <div>30</div>
+
+    </div>
+  </section>
+
+  <section class="calendar">
+    <h2 class="month">JULY 2026</h2>
+
+    <div class="weekdays">
+      <div>Su</div><div>Mo</div><div>Tu</div>
+      <div>We</div><div>Th</div><div>Fr</div><div>Sa</div>
+    </div>
+
+    <div class="days">
+
+      <div class="empty"></div>
+      <div class="empty"></div>
+      <div class="empty"></div>
+
+      <div>1</div>
+      <div>2</div>
+      <div>3</div>
+
+      <div class="event-day"
+        data-title="July Kickoff"
+        data-date="July 4, 2026"
+        data-desc="Launch planning and roadmap discussion.">
+        4
+        <span class="event-dot"></span>
+      </div>
+
+      <div>5</div>
+      <div>6</div>
+      <div>7</div>
+      <div>8</div>
+      <div>9</div>
+      <div>10</div>
+      <div>11</div>
+
+      <div>12</div>
+      <div>13</div>
+
+      <div class="event-day"
+        data-title="Creative Session"
+        data-date="July 14, 2026"
+        data-desc="Brainstorming and visual concept development.">
+        14
+        <span class="event-dot"></span>
+      </div>
+
+      <div>15</div>
+      <div>16</div>
+      <div>17</div>
+      <div>18</div>
+
+      <div>19</div>
+      <div>20</div>
+      <div>21</div>
+      <div>22</div>
+      <div>23</div>
+
+      <div class="event-day"
+        data-title="Retro Arcade Night"
+        data-date="July 24, 2026"
+        data-desc="Games, synthwave, and nostalgia.">
+        24
+        <span class="event-dot"></span>
+      </div>
+
+      <div>25</div>
+
+      <div>26</div>
+      <div>27</div>
+      <div>28</div>
+      <div>29</div>
+      <div>30</div>
+      <div>31</div>
+
+    </div>
+  </section>
+
+</div>
+
+<div id="overlay" class="overlay">
+  <div class="event-card">
+
+    <button id="closeBtn">&times;</button>
+
+    <h2 id="eventTitle"></h2>
+
+    <div id="eventDate" class="date"></div>
+
+    <div class="divider"></div>
+
+    <p id="eventDesc"></p>
+
+  </div>
+</div>
