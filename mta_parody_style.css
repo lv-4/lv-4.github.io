@@ -1,0 +1,210 @@
+body{
+    background-color: white;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+
+
+
+#outerSquare{
+    width: 500px;
+    height: 500px;
+    border: 1px solid black;
+    background-color: white;
+}
+
+#plannedWorkHeader{
+
+    background-color: black;
+    top: 0px;
+    position: relative;
+    width: 100%;
+    height: 50px;
+}
+
+#plannedWorkTextContainer{
+    color: white;
+    position: relative;
+    left: 10px;
+    top: 5px;
+    font-size: 23px;
+}
+
+
+.circle{
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background-color: rebeccapurple;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    font-size: 43px;
+    margin-top: 19px;
+    margin-bottom: 13px;
+
+    
+}
+
+#ratsContainer{
+    display: flex;
+    flex-direction: row;
+    gap: 0px;
+    margin-right: 10px;
+    margin-left: -16px;
+
+}
+
+
+#beigeContainer{
+    display: flex;
+    justify-content: space-between;
+    background-color: #b6b6b6;
+    top: 22px;
+    position: relative;
+    
+}
+
+
+#R{
+    background-color:#FCCC0A;
+    color: black;
+}
+
+#A{
+    background-color: #0139a6;
+    color: white;
+}
+
+#T{
+    background-color: #02add0
+}
+
+#S{
+    background-color: #808183;
+
+}
+
+
+#moonContainer{
+    border-radius: 6px;
+    background-color: black;
+    width: 27px;
+    height: 27px;
+}
+
+#nightsContainer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 3px;
+    width: 153px;
+    margin-left: 17px;
+
+
+}
+
+
+#nights{
+    font-size: 32px;
+    font-weight: 500;
+  
+    
+
+}
+
+
+#deetsFlex{
+    display: flex;
+    flex-direction: column;
+    padding-left: 27px;
+    width: 153px;
+    margin-top: 3px;
+    font-weight: 500;
+    margin-bottom: 10px;
+    font-size: 17px;
+}
+
+
+.moon{
+    margin: auto;
+    position: relative;
+    top: -38px;
+    right: 0;
+    bottom: 0;
+    left: -30px;
+    width: 100px;
+    height: 100px;
+    background-color: transparent;
+    border-radius: 50%;
+    box-shadow: 25px 10px 0px 0px #b6b6b6;
+    transform: scaleX(-1) scale(0.21);
+  }
+
+
+#trackReplacement{
+
+    color: black;
+    position: relative;
+    top: 30px;
+    left: 27px;
+    font-weight: 500;
+    font-size: 21px;
+}
+
+
+#hairline{
+   height: 1px;
+   width: 92%;
+   background-color: black;
+  
+
+}
+
+#hairlineContainer{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    top: 37px;
+}
+
+
+.buh{
+    width: 83px;
+    height: 83px;
+    top: 7px;
+    position: relative;
+}
+
+
+#theBigKahuna{
+    position: relative;
+    top: 55px;
+    margin-left: 28px;
+    margin-right: 28px;
+    font-size: 33px;
+    font-weight: 700;
+
+}
+
+
+#theSmolKahuna{
+    position: relative;
+    top: 65px;
+    margin-left: 28px;
+    margin-right: 28px;
+    font-weight: 500;
+
+}
+
+#disclaim{
+    font-size: 9px;
+    position: relative;
+    top: -12px;
+    left: 3px;
+}
