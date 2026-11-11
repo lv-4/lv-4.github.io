@@ -122,26 +122,25 @@
       pointer-events: none;
     }
 
-    /* Cleaned Table of Contents / Custom Mods Styles */
-
-
-    .tocContainer{
-      position:absolute;
-      top: 164px;
+    /* Table of Contents Styles */
+    .tocContainer {
+      position: absolute;
+      top: 150px;
       left: 30px;
+      width: 360px;
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      gap: 10px;
     }
-    .toc {
-      position: absolute;
-      top: 164px;
-      left: 30px;
+
+    .toc-item {
       display: flex;
-      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
       color: #fafafa;
       font-family: 'VT323', monospace;
-      font-size: 1.6rem;
+      font-size: 1.5rem;
       letter-spacing: 3px;
       z-index: 10;
       filter: blur(0.7px);
@@ -152,34 +151,26 @@
         -1px -1px 0px rgba(0, 255, 255, 0.6);
     }
 
-    .toc-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-      width: 100%;
-    }
-
     .toc-title {
       white-space: nowrap;
+      flex-shrink: 0;
     }
 
     .toc-dots {
       display: flex;
-      justify-content: flex-end;
-      align-items: flex-end;
-      gap: 13px;
+      align-items: center;
+      flex-grow: 1;
+      overflow: hidden;
       position: relative;
-      bottom: -9px;
+      height: 10px;
+      margin: 0 4px; /* Tiny cushion so they don't visually overlap text directly */
     }
 
-    .dot {
+    .toc-element {
       display: block;
-      width: 5px;
-      height: 5px;
       background-color: white;
       position: relative;
-      bottom: 4px;
+      flex-shrink: 0;
       filter: blur(0.7px);
       text-shadow: 
         0 0 10px rgba(191, 191, 191, 0.8), 
@@ -190,6 +181,16 @@
 
     .toc-page {
       white-space: nowrap;
+      flex-shrink: 0;
+      display: inline-block;
+    }
+
+    .tocContainer.align-numbers-right .toc-page {
+      text-align: right;
+    }
+
+    .tocContainer.align-numbers-left .toc-page {
+      text-align: left;
     }
 
     .dg.ac {
@@ -207,55 +208,31 @@
             <img class="image" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-66cQ2MEKR0KEQECJ51ZpqFL4ApRoVnNrb-i11HxPrjaCf9xsCOCDuunn&s=10">
             <div id="rats" style="filter: blur(1.2px);">RATS</div>
 
+            <div class="tocContainer align-numbers-right" id="tocContainer">
+              <div class="toc-item">
+                <span class="toc-title">Trash (LB)</span>
+                <div class="toc-dots" aria-hidden="true"></div>
+                <span class="toc-page">919</span>
+              </div>
 
-            <div class='tocContainer'>
-              <nav class="toc">
-                <div class="toc-item">
-                  <span class="toc-title">Trash (LB)</span>
-                  <div class="toc-dots" aria-hidden="true">
-                    <span class="dot"></span>
-                    <span class="dot"></span>
-                    <span class="dot"></span>
-                    <span class="dot"></span>
-                    <span class="dot"></span>
-                    <span class="dot"></span>
-                  </div>
-                  <span class="toc-page">919</span>
-                </div>
-              </nav>
-  
-  
-              <nav class="toc">
-                <div class="toc-item">
-                  <span class="toc-title">Bags</span>
-                  <div class="toc-dots" aria-hidden="true">
-                    <span class="dot"></span>
-                    <span class="dot"></span>
-                    <span class="dot"></span>
-                    <span class="dot"></span>
-                    <span class="dot"></span>
-                    <span class="dot"></span>
-                  </div>
-                  <span class="toc-page">6</span>
-                </div>
-              </nav>
-  
-               <nav class="toc">
-                <div class="toc-item">
-                  <span class="toc-title">Attendance</span>
-                  <div class="toc-dots" aria-hidden="true">
-                    <span class="dot"></span>
-                    <span class="dot"></span>
-                    <span class="dot"></span>
-                    <span class="dot"></span>
-                    <span class="dot"></span>
-                    <span class="dot"></span>
-                  </div>
-                  <span class="toc-page">17</span>
-                </div>
-              </nav>
+              <div class="toc-item">
+                <span class="toc-title">Trash (All Time)</span>
+                <div class="toc-dots" aria-hidden="true"></div>
+                <span class="toc-page">19000</span>
+              </div>
+
+              <div class="toc-item">
+                <span class="toc-title">Bags</span>
+                <div class="toc-dots" aria-hidden="true"></div>
+                <span class="toc-page">6</span>
+              </div>
+
+              <div class="toc-item">
+                <span class="toc-title">Attendance</span>
+                <div class="toc-dots" aria-hidden="true"></div>
+                <span class="toc-page">17</span>
+              </div>
             </div>
-
 
           </div>
         </div>
@@ -266,19 +243,66 @@
   <div class="vignette"></div>
 
   <script>
+    const settings = {
+      numberAlign: 'right' 
+    };
+
+    function updateFill() {
+      document.querySelectorAll('.toc-item').forEach(item => {
+        const container = item.querySelector('.toc-dots');
+        const titleSpan = item.querySelector('.toc-title');
+        const pageSpan = item.querySelector('.toc-page');
+        if (!container || !titleSpan || !pageSpan) return;
+
+        container.innerHTML = '';
+        
+        // Calculate exact available distance between the end of the title and start of the page number
+        const titleRect = titleSpan.getBoundingClientRect();
+        const pageRect = pageSpan.getBoundingClientRect();
+        const containerRect = container.getBoundingClientRect();
+        
+        let availableWidth;
+        if (settings.numberAlign === 'left') {
+          availableWidth = pageRect.left - titleRect.right - 8;
+        } else {
+          // If right aligned, span covers up to its right edge
+          availableWidth = pageRect.right - titleRect.right - 8;
+        }
+
+        if (availableWidth <= 0) return;
+
+        const elementWidth = 4;
+        const gap = 8; // tighter gap to ensure smooth bridging
+        const borderRadius = '50%';
+
+        const step = elementWidth + gap;
+        const count = Math.floor(availableWidth / step);
+
+        for (let i = 0; i < count; i++) {
+          const el = document.createElement('span');
+          el.className = 'toc-element';
+          el.style.width = elementWidth + 'px';
+          el.style.height = '4px';
+          el.style.marginRight = (i === count - 1 ? 0 : gap) + 'px';
+          el.style.borderRadius = borderRadius;
+          container.appendChild(el);
+        }
+      });
+    }
+
+    window.addEventListener('load', updateFill);
+    window.addEventListener('resize', updateFill);
+
+    // --- Screen Effect Setup ---
     class ScreenEffect {
       constructor(parent, options) {
         this.parent = parent;
         if (typeof parent === "string") {
           this.parent = document.querySelector(parent);
         }
-        
         this.config = Object.assign({}, {}, options);
         this.effects = {};
-        this.events = {
-          resize: this.onResize.bind(this)
-        };
-        
+        this.events = { resize: this.onResize.bind(this) };
         window.addEventListener("resize", this.events.resize, false);
         this.render();
       }
@@ -286,13 +310,10 @@
       render() {
         const container = document.createElement("div");
         container.classList.add("screen-container");
-        
         const wrapper1 = document.createElement("div");
         wrapper1.classList.add("screen-wrapper");
-        
         const wrapper2 = document.createElement("div");
         wrapper2.classList.add("screen-wrapper"); 
-        
         const wrapper3 = document.createElement("div");
         wrapper3.classList.add("screen-wrapper");     
         
@@ -309,14 +330,11 @@
       
       onResize(e) {
         this.rect = this.parent.getBoundingClientRect();
+        setTimeout(updateFill, 50);
       }
       
       add(type, options) {
-        const config = Object.assign({}, {
-          fps: 30,
-          blur: 1
-        }, options);
-        
+        const config = Object.assign({}, { fps: 30, blur: 1 }, options);
         let node = false;
         let wrapper = this.nodes.wrapper2;
         
@@ -348,20 +366,27 @@
             }
             break;
         }
-
-        this.effects[type] = {
-          wrapper,
-          node,
-          enabled: true,
-          config
-        };
-        
+        this.effects[type] = { wrapper, node, enabled: true, config };
         return this;
       }
     }
 
     const screen = new ScreenEffect("#screen", {});
+    
     const gui = new dat.GUI();
+    gui.add(settings, 'numberAlign', ['left', 'right']).name('Number Edge Align').onChange(val => {
+      document.getElementById('tocContainer').className = `tocContainer align-numbers-${val}`;
+      updateFill();
+    });
+
+    setTimeout(() => {
+      for (const prop in config.effects) {
+        if (!!config.effects[prop].enabled) {
+          screen.add(prop, config.effects[prop].options);
+        }
+      }
+      updateFill();
+    }, 1000);
 
     const config = {
       effects: {
@@ -380,14 +405,6 @@
         scanlines: { enabled: true },
       },
     };
-
-    setTimeout(() => {
-      for (const prop in config.effects) {
-        if (!!config.effects[prop].enabled) {
-          screen.add(prop, config.effects[prop].options);
-        }
-      }
-    }, 1000);
   </script>
 </body>
 </html>
