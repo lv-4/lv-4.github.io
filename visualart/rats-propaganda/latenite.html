@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta charset="UTF-8">
+
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+ 
+ 
+  <!-- Google Fonts: Parsienne -->
+  <link href="https://fonts.googleapis.com/css2?family=Oleo+Script:wght@400;700&family=Parisienne&display=swap" rel="stylesheet">
+  <!-- Google Fonts: VT323 -->
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+  <!-- dat.GUI -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.6/dat.gui.min.js"></script>
+
+  
+  <style>
+    body {
+      margin: 0;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background-color: #000;
+      font-family: 'VT323', monospace;
+    }
+
+    #screen {
+      width: 100%;
+      height: 100%;
+      background: transparent
+        linear-gradient(to bottom, #85908c 0%, #323431 100%)
+        repeat scroll 0 0;
+      background-size: cover;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #rats {
+      position: absolute;
+      top: 10px;
+      left: 30px;
+      font-size:10px;
+      font-family: 'VT323', monospace;
+      font-size: 5rem;
+      color: #fafafa;
+      letter-spacing: 8px;
+      z-index: 10;
+      filter: blur(1.2px);
+      text-shadow: 
+        0 0 10px rgba(191, 191, 191, 0.8), 
+        0 0 30px rgba(173, 173, 173, 0.5),
+        2px 2px 0px rgba(218, 218, 218, 0.6),
+        -2px -2px 0px rgba(0, 255, 255, 0.6);
+    }
+
+    #tonight {
+      position: absolute;
+      top: 40px;
+      left: 244px;
+      font-size:60px;
+      font-family:"Parisienne", cursive, monospace;
+      font-size: 20px;
+      color: #fafafa;
+      letter-spacing: 8px;
+      z-index: 10;
+      filter: blur(0.4px);
+      text-shadow: 
+        0 0 5px rgba(191, 191, 191, 0.8), 
+        0 0 15px rgba(173, 173, 173, 0.5),
+        1px 1px 0px rgba(218, 218, 218, 0.6),
+        -1px -1px 0px rgba(0, 255, 255, 0.6);
+      transform: scale(1.6);
+     
+    }
+
+    canvas {
+      position: absolute;
+      left: 0;
+      top: 0;
+      z-index: 9998;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    .screen-container {
+      width: 420px;
+      height: 420px;
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 0 40px rgba(0,0,0,0.9);
+      border-radius: 6px;
+    }
+
+    .screen-wrapper {
+      position: relative;
+      width: 100%;
+      height: 100%; 
+    }
+
+    .image {
+      width: 100%;
+      height: auto;
+      filter: blur(1.2px) brightness(0.7);
+      position: relative;
+      bottom: 100px;
+    }
+
+    .vignette {
+      background-image: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/86186/crt.png);
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      left: 0;
+      top: 0; 
+      background-repeat: no-repeat;
+      background-size: 100% 100%; 
+      z-index: 10000;
+      pointer-events: none;
+    }
+
+    .parisienne-regular {
+  font-family: "Parisienne", cursive;
+  font-weight: 400;
+  font-style: normal;
+}
+
+
+    .scanlines {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      left: 0;
+      top: 0; 
+      z-index: 9999;
+      opacity:0.5;
+      background: linear-gradient(
+          rgba(18, 16, 16, 0) 50%,
+          rgba(2, 2, 2, 0.75) 50%
+        ),
+        linear-gradient(
+          90deg,
+          rgba(255, 0, 0, 0.06),
+          rgba(0, 255, 0, 0.02),
+          rgba(0, 0, 255, 0.06)
+        );
+      background-size: 100% 2px, 3px 100%;
+      pointer-events: none;
+    }
+
+   
+
+
+    .dg.ac {
+      z-index: 10001 !important;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="screen">
+    <div id="rats">RATS</div>
+    <div id="tonight" class='.parisienne-regular'>Tonight</div>
+  </div>
+
+  <script>
+    function getRandomInt(min, max) {
+      min = Math.ceil(min);
+      max = Math.floor(max);
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    class ScreenEffect {
+      constructor(parent, options) {
+        this.parent = parent;
+        if (typeof parent === "string") {
+          this.parent = document.querySelector(parent);
+        }
+        
+        this.config = Object.assign({}, {}, options);
+        this.effects = {};
+        this.events = {
+          resize: this.onResize.bind(this)
+        };
+        
+        window.addEventListener("resize", this.events.resize, false);
+        this.render();
+      }
+      
+      render() {
+        const container = document.createElement("div");
+        container.classList.add("screen-container");
+        
+        const wrapper1 = document.createElement("div");
+        wrapper1.classList.add("screen-wrapper");
+        
+        const wrapper2 = document.createElement("div");
+        wrapper2.classList.add("screen-wrapper"); 
+        
+        const wrapper3 = document.createElement("div");
+        wrapper3.classList.add("screen-wrapper");     
+        
+        wrapper1.appendChild(wrapper2);
+        wrapper2.appendChild(wrapper3);
+        container.appendChild(wrapper1);
+        
+        this.parent.parentNode.insertBefore(container, this.parent);
+        wrapper3.appendChild(this.parent);
+        
+        this.nodes = { container, wrapper1, wrapper2, wrapper3 };
+        this.onResize();
+      }
+      
+      onResize(e) {
+        this.rect = this.parent.getBoundingClientRect();
+      }
+      
+      add(type, options) {
+        const config = Object.assign({}, {
+          fps: 30,
+          blur: 1
+        }, options);
+        
+       
+        let node = false;
+        let wrapper = this.nodes.wrapper2;
+        
+        switch(type) {
+         
+          case "scanlines":
+            node = document.createElement("div");
+            node.classList.add(type);
+            wrapper.appendChild(node);
+            break;
+          case "vignette":
+            wrapper = this.nodes.container;
+            node = document.createElement("div");
+            node.classList.add(type);
+            wrapper.appendChild(node);
+            break;
+          case "image":
+            wrapper = this.parent;
+            node = document.createElement('img');
+            node.classList.add(type);
+            node.src = config.src;
+            wrapper.appendChild(node);
+            break;
+          case "rats":
+            wrapper = this.parent;
+            node = document.querySelector("#rats");
+            if (node) {
+              wrapper.appendChild(node);
+              node.style.filter = `blur(${config.blur}px)`;
+            }
+            break;
+        }
+
+        this.effects[type] = {
+          wrapper,
+          node,
+          enabled: true,
+          config
+        };
+        
+        return this;
+      }
+      
+      
+    }
+
+    const screen = new ScreenEffect("#screen", {});
+    const gui = new dat.GUI();
+
+    const config = {
+      effects: {
+       
+        image: {
+          enabled: true,
+          options: {
+            src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-66cQ2MEKR0KEQECJ51ZpqFL4ApRoVnNrb-i11HxPrjaCf9xsCOCDuunn&s=10",        
+            blur: 1.2
+          }
+        },
+        rats: {
+          enabled: true,
+          options: { blur: 1.2 }
+        },
+        vignette: { enabled: true },
+        scanlines: { enabled: true },
+      },
+    };
+
+
+   
+
+
+    setTimeout(() => {
+      for (const prop in config.effects) {
+        if (!!config.effects[prop].enabled) {
+          screen.add(prop, config.effects[prop].options);
+        }
+      }
+    }, 1000);
+  </script>
+</body>
+</html>
