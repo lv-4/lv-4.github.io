@@ -1,23 +1,19 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
-
   <meta charset="UTF-8">
 
-
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
- 
- 
-  <!-- Google Fonts: Parsienne -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  
+  <!-- Google Fonts: Parisienne -->
   <link href="https://fonts.googleapis.com/css2?family=Oleo+Script:wght@400;700&family=Parisienne&display=swap" rel="stylesheet">
   <!-- Google Fonts: VT323 -->
   <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
   <!-- dat.GUI -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.6/dat.gui.min.js"></script>
 
-  
   <style>
+    /* Base Layout */
     body {
       margin: 0;
       width: 100vw;
@@ -45,7 +41,6 @@
       position: absolute;
       top: 10px;
       left: 30px;
-      font-size:10px;
       font-family: 'VT323', monospace;
       font-size: 5rem;
       color: #fafafa;
@@ -57,26 +52,6 @@
         0 0 30px rgba(173, 173, 173, 0.5),
         2px 2px 0px rgba(218, 218, 218, 0.6),
         -2px -2px 0px rgba(0, 255, 255, 0.6);
-    }
-
-    #tonight {
-      position: absolute;
-      top: 40px;
-      left: 244px;
-      font-size:60px;
-      font-family:"Parisienne", cursive, monospace;
-      font-size: 20px;
-      color: #fafafa;
-      letter-spacing: 8px;
-      z-index: 10;
-      filter: blur(0.4px);
-      text-shadow: 
-        0 0 5px rgba(191, 191, 191, 0.8), 
-        0 0 15px rgba(173, 173, 173, 0.5),
-        1px 1px 0px rgba(218, 218, 218, 0.6),
-        -1px -1px 0px rgba(0, 255, 255, 0.6);
-      transform: scale(1.6);
-     
     }
 
     canvas {
@@ -125,13 +100,6 @@
       pointer-events: none;
     }
 
-    .parisienne-regular {
-  font-family: "Parisienne", cursive;
-  font-weight: 400;
-  font-style: normal;
-}
-
-
     .scanlines {
       width: 100%;
       height: 100%;
@@ -139,7 +107,7 @@
       left: 0;
       top: 0; 
       z-index: 9999;
-      opacity:0.5;
+      opacity: 0.5;
       background: linear-gradient(
           rgba(18, 16, 16, 0) 50%,
           rgba(2, 2, 2, 0.75) 50%
@@ -154,8 +122,65 @@
       pointer-events: none;
     }
 
-   
+    /* Cleaned Table of Contents / Custom Mods Styles */
+    .toc {
+      position: absolute;
+      top: 164px;
+      left: 30px;
+      display: flex;
+      flex-direction: row;
+      color: #fafafa;
+      font-family: 'VT323', monospace;
+      font-size: 1.6rem;
+      letter-spacing: 3px;
+      z-index: 10;
+      filter: blur(0.7px);
+      text-shadow: 
+        0 0 8px rgba(191, 191, 191, 0.8), 
+        0 0 15px rgba(173, 173, 173, 0.5), 
+        1px 1px 0px rgba(218, 218, 218, 0.6), 
+        -1px -1px 0px rgba(0, 255, 255, 0.6);
+    }
 
+    .toc-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+    }
+
+    .toc-title {
+      white-space: nowrap;
+    }
+
+    .toc-dots {
+      display: flex;
+      justify-content: flex-end;
+      align-items: flex-end;
+      gap: 13px;
+      position: relative;
+      bottom: 2px;
+    }
+
+    .dot {
+      display: block;
+      width: 5px;
+      height: 5px;
+      background-color: white;
+      position: relative;
+      bottom: 4px;
+      filter: blur(0.7px);
+      text-shadow: 
+        0 0 10px rgba(191, 191, 191, 0.8), 
+        0 0 30px rgba(173, 173, 173, 0.5), 
+        2px 2px 0px rgba(218, 218, 218, 0.6), 
+        -2px -2px 0px rgba(0, 255, 255, 0.6);
+    }
+
+    .toc-page {
+      white-space: nowrap;
+    }
 
     .dg.ac {
       z-index: 10001 !important;
@@ -164,18 +189,38 @@
 </head>
 <body>
 
-  <div id="screen">
-    <div id="rats">RATS</div>
-    <div id="tonight" class='.parisienne-regular'>Tonight</div>
+  <div class="screen-container">
+    <div class="screen-wrapper">
+      <div class="screen-wrapper">
+        <div class="screen-wrapper">
+          <div id="screen">
+            <img class="image" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-66cQ2MEKR0KEQECJ51ZpqFL4ApRoVnNrb-i11HxPrjaCf9xsCOCDuunn&s=10">
+            <div id="rats" style="filter: blur(1.2px);">RATS</div>
+
+            <nav class="toc">
+              <div class="toc-item">
+                <span class="toc-title">Trash collected</span>
+                <div class="toc-dots" aria-hidden="true">
+                  <span class="dot">|</span>
+                  <span class="dot"></span>
+                  <span class="dot"></span>
+                  <span class="dot"></span>
+                  <span class="dot"></span>
+                  <span class="dot">|</span>
+                </div>
+                <span class="toc-page">99 LB</span>
+              </div>
+            </nav>
+
+          </div>
+        </div>
+      </div>
+      <div class="scanlines"></div>
+    </div>
   </div>
+  <div class="vignette"></div>
 
   <script>
-    function getRandomInt(min, max) {
-      min = Math.ceil(min);
-      max = Math.floor(max);
-      return Math.floor(Math.random() * (max - min + 1)) + min;
-    }
-
     class ScreenEffect {
       constructor(parent, options) {
         this.parent = parent;
@@ -227,12 +272,10 @@
           blur: 1
         }, options);
         
-       
         let node = false;
         let wrapper = this.nodes.wrapper2;
         
         switch(type) {
-         
           case "scanlines":
             node = document.createElement("div");
             node.classList.add(type);
@@ -270,8 +313,6 @@
         
         return this;
       }
-      
-      
     }
 
     const screen = new ScreenEffect("#screen", {});
@@ -279,7 +320,6 @@
 
     const config = {
       effects: {
-       
         image: {
           enabled: true,
           options: {
@@ -295,10 +335,6 @@
         scanlines: { enabled: true },
       },
     };
-
-
-   
-
 
     setTimeout(() => {
       for (const prop in config.effects) {
